@@ -40,11 +40,13 @@ services:
     deploy:
       resources: 
         limits:
-          cpu: '0.5'
+          cpus: '0.5'
           memory: 512M
 volumes:
-  redis_data
+  redis_data:
 networks:
-  ecom-net
-  
+  ecom-net: 
+    driver: bridge
+    
+
 

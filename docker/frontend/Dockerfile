@@ -7,7 +7,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 #stage2 as Runner 
-FROM python:3.10-alpine AS Runner
+FROM python:3.10-alpine AS runner
 WORKDIR /app 
 # Create user without password
 RUN adduser -D appuser
