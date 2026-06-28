@@ -1,0 +1,50 @@
+name: E-commerce app
+version: '1.0'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - ecom-net 
+    environment:
+      - INVENTORY_SERVICE_URL=http://inventory:5001
+    depends_on:
+      - inventory
+  inventory:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    networks:
+      - ecom-net
+    environment:
+      - REDIS_HOST=redis-db
+    depends_on:
+      - redis-db
+  redis-db:
+    image: redis:7.2-alpine  
+    command: redis-server --appendonly yes
+    networks:
+      - ecom-net
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    deploy:
+      resources: 
+        limits:
+          cpu: '0.5'
+          memory: 512M
+volumes:
+  redis_data
+networks:
+  ecom-net
+  
+
